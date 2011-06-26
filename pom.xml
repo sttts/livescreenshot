@@ -1,28 +1,43 @@
+
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>org.jenkins-ci.plugins</groupId>
-    <artifactId>plugin</artifactId>
-    <version>1.399</version><!-- which version of Jenkins is this plugin built against? -->
-  </parent>
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.jenkins-ci.plugins</groupId>
+		<artifactId>plugin</artifactId>
+		<version>1.399</version><!-- which version of Jenkins is this plugin built against? -->
+	</parent>
 
-  <groupId>com.limoia.jenkins.livescreenshot</groupId>
-  <artifactId>livescreenshot</artifactId>
-  <version>1.0-SNAPSHOT</version>
-  <packaging>hpi</packaging>
+	<groupId>com.limoia.jenkins.livescreenshot</groupId>
+	<artifactId>livescreenshot</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<packaging>hpi</packaging>
 
+	<developers>
+		<developer>
+			<id>sttts</id>
+			<name>Dr. Stefan Schimanski</name>
+			<email>sts@limoia.com</email>
+		</developer>
+	</developers>
+	
   <!-- get every artifact through maven.glassfish.org, which proxies all the artifacts that we need -->
-  <repositories>
-    <repository>
-      <id>m.g.o-public</id>
-      <url>http://maven.glassfish.org/content/groups/public/</url>
-    </repository>
-  </repositories>
+	<repositories>
+		<repository>
+			<id>m.g.o-public</id>
+			<url>http://maven.glassfish.org/content/groups/public/</url>
+		</repository>
+	</repositories>
 
-  <pluginRepositories>
-    <pluginRepository>
-      <id>m.g.o-public</id>
-      <url>http://maven.glassfish.org/content/groups/public/</url>
-    </pluginRepository>
-  </pluginRepositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>m.g.o-public</id>
+			<url>http://maven.glassfish.org/content/groups/public/</url>
+		</pluginRepository>
+	</pluginRepositories>
+	
+	<scm>
+        <connection>scm:git:git://github.com/sttts/livescreenshot.git</connection>
+        <developerConnection>scm:git:git@github.com:sttts/livescreenshot.git</developerConnection>
+        <url>https://github.com/sttts/livescreenshot</url>
+    </scm>
 </project>
