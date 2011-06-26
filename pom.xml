@@ -20,6 +20,13 @@
 		</developer>
 	</developers>
 	
+	<licenses>
+        <license>
+            <name>GNU General Public License (GPL)</name>
+            <url>http://www.gnu.org/licenses/gpl.html</url>
+        </license>
+    </licenses>
+	
   <!-- get every artifact through maven.glassfish.org, which proxies all the artifacts that we need -->
 	<repositories>
 		<repository>
