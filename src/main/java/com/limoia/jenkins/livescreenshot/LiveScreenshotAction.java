@@ -108,6 +108,11 @@ public class LiveScreenshotAction implements Action {
 		return bytes;
 	}
 	
+	public byte[] noScreenshotFile() throws IOException {
+		InputStream is = this.getClass().getResourceAsStream("LiveScreenshotAction/noscreenshot.png");
+		return this.readContent(is, is.available());
+	}
+	
 	public byte[] screenshotArtifact(String filename) throws IOException {
 		// does artifact exist?
 		String path = this.build.getArtifactsDir().getCanonicalPath() + "/screenshots";
@@ -117,31 +122,31 @@ public class LiveScreenshotAction implements Action {
 			FileInputStream fis = new FileInputStream(file);
 			byte[] bytes = readContent(fis, file.length());
 			fis.close();
-			logger.info("Delivering artifact " + file.getCanonicalPath() + " with " + bytes.length + " bytes");
+			//logger.info("Delivering artifact " + file.getCanonicalPath() + " with " + bytes.length + " bytes");
 			return bytes;
 		}
 
-		logger.warning("Artifact " + file.getCanonicalPath() + " not found.");
-		return null;
+		//logger.warning("Artifact " + file.getCanonicalPath() + " not found.");
+		return this.noScreenshotFile();
 	}
-
+	
 	public byte[] liveScreenshot(String filename) throws IOException {
 		try {
 			// return workspace file
 			FilePath fp = build.getWorkspace().child(filename);
 			if (!fp.exists()) {
-				logger.warning("Live screenshot " + filename + " not found.");
-				return null;
+				//logger.warning("Live screenshot " + filename + " not found.");
+				return this.noScreenshotFile();
 			}
 			InputStream is = fp.read();
 			byte[] bytes = readContent(is, fp.length());
 			is.read(bytes);
-			logger.info("Delivering live screenshot " + filename + " with " + bytes.length + " bytes");
+			//logger.info("Delivering live screenshot " + filename + " with " + bytes.length + " bytes");
 			return bytes;
 		}
 		catch (InterruptedException ex) {
-			logger.warning("Live screenshot " + filename + " cannot be accessed.");
-			return null;
+			//logger.warning("Live screenshot " + filename + " cannot be accessed.");
+			return this.noScreenshotFile();
 		}
 	}
 	
@@ -153,7 +158,7 @@ public class LiveScreenshotAction implements Action {
 		
 		// build inactive, but not artifact?
 		if (!this.build.isBuilding())
-			return null;
+			return this.noScreenshotFile();
 				
 		return liveScreenshot(filename);
 	}
