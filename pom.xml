@@ -9,7 +9,7 @@
 
 	<groupId>com.limoia.jenkins.livescreenshot</groupId>
 	<artifactId>livescreenshot</artifactId>
-	<version>1.2.1</version>
+	<version>1.2.2-SNAPSHOT</version>
 	<packaging>hpi</packaging>
 
 	<developers>
