@@ -127,7 +127,7 @@ public class LiveScreenshotAction implements Action {
 		}
 
 		//logger.warning("Artifact " + file.getCanonicalPath() + " not found.");
-		return this.noScreenshotFile();
+		return null;
 	}
 	
 	public byte[] liveScreenshot(String filename) throws IOException {
