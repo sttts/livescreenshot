@@ -155,10 +155,6 @@ public class LiveScreenshotAction implements Action {
 		byte[] bytes = screenshotArtifact(filename);
 		if (bytes != null)
 			return bytes;
-		
-		// build inactive, but not artifact?
-		if (!this.build.isBuilding())
-			return this.noScreenshotFile();
 				
 		return liveScreenshot(filename);
 	}
