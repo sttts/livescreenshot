@@ -13,12 +13,18 @@ import hudson.util.RunList;
 import hudson.views.ListViewColumn;
 import hudson.views.ListViewColumnDescriptor;
 import java.util.List;
+import org.kohsuke.stapler.DataBoundConstructor;
 
 /**
  *
  * @author sts
  */
 public class LiveScreenshotColumn extends ListViewColumn {
+	
+	@DataBoundConstructor
+    public LiveScreenshotColumn() {
+    }
+	
 	public String collectScreenshots(Run run) {
 		String html = "";
 		// sub-runs of matrix?
@@ -49,7 +55,7 @@ public class LiveScreenshotColumn extends ListViewColumn {
     }
     
     @Extension
-    public static class KvmtestScreenshotColumnDescriptor extends ListViewColumnDescriptor {
+    public static class LiveScreenshotColumnDescriptor extends ListViewColumnDescriptor {
 
         @Override
         public String getDisplayName() {
