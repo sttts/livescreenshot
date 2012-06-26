@@ -12,8 +12,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.servlet.ServletOutputStream;
 
@@ -27,7 +25,6 @@ public class LiveScreenshotAction implements Action {
 	private AbstractBuild build;
 	private final String fullscreenFilename;
 	private final String thumbnailFilename;
-	Logger logger = Logger.getLogger(LiveScreenshotAction.class.getName());
 	
 	public String getFullscreenFilename() {
 		return fullscreenFilename;
@@ -122,11 +119,9 @@ public class LiveScreenshotAction implements Action {
 			FileInputStream fis = new FileInputStream(file);
 			byte[] bytes = readContent(fis, file.length());
 			fis.close();
-			//logger.info("Delivering artifact " + file.getCanonicalPath() + " with " + bytes.length + " bytes");
 			return bytes;
 		}
 
-		//logger.warning("Artifact " + file.getCanonicalPath() + " not found.");
 		return null;
 	}
 	
@@ -135,17 +130,14 @@ public class LiveScreenshotAction implements Action {
 			// return workspace file
 			FilePath fp = build.getWorkspace().child(filename);
 			if (!fp.exists()) {
-				//logger.warning("Live screenshot " + filename + " not found.");
 				return this.noScreenshotFile();
 			}
 			InputStream is = fp.read();
 			byte[] bytes = readContent(is, fp.length());
 			is.read(bytes);
-			//logger.info("Delivering live screenshot " + filename + " with " + bytes.length + " bytes");
 			return bytes;
 		}
 		catch (InterruptedException ex) {
-			//logger.warning("Live screenshot " + filename + " cannot be accessed.");
 			return this.noScreenshotFile();
 		}
 	}
