@@ -4,12 +4,12 @@
 	<parent>
 		<groupId>org.jenkins-ci.plugins</groupId>
 		<artifactId>plugin</artifactId>
-		<version>1.431</version><!-- which version of Jenkins is this plugin built against? -->
+		<version>1.469</version><!-- which version of Jenkins is this plugin built against? -->
 	</parent>
 
 	<groupId>com.limoia.jenkins.livescreenshot</groupId>
 	<artifactId>livescreenshot</artifactId>
-	<version>1.2.5-SNAPSHOT</version>
+	<version>1.3.0-SNAPSHOT</version>
 	<packaging>hpi</packaging>
 
 	<developers>
@@ -29,17 +29,17 @@
 	
   <!-- get every artifact through maven.glassfish.org, which proxies all the artifacts that we need -->
 	<repositories>
-		<repository>
-			<id>m.g.o-public</id>
-			<url>http://maven.glassfish.org/content/groups/public/</url>
-		</repository>
+	  <repository>
+	    <id>repo.jenkins-ci.org</id>
+	    <url>http://repo.jenkins-ci.org/public/</url>
+	  </repository>
 	</repositories>
 
 	<pluginRepositories>
-		<pluginRepository>
-			<id>m.g.o-public</id>
-			<url>http://maven.glassfish.org/content/groups/public/</url>
-		</pluginRepository>
+	  <pluginRepository>
+	    <id>repo.jenkins-ci.org</id>
+	    <url>http://repo.jenkins-ci.org/public/</url>
+	  </pluginRepository>
 	</pluginRepositories>
 	
 	<scm>

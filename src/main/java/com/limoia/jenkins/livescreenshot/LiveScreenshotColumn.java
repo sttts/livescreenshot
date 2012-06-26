@@ -6,13 +6,19 @@ package com.limoia.jenkins.livescreenshot;
 
 import hudson.Extension;
 import hudson.matrix.MatrixBuild;
+import hudson.matrix.MatrixProject;
 import hudson.matrix.MatrixRun;
+import hudson.model.Computer;
+import hudson.model.Executor;
 import hudson.model.Job;
 import hudson.model.Run;
 import hudson.util.RunList;
 import hudson.views.ListViewColumn;
 import hudson.views.ListViewColumnDescriptor;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 /**
@@ -45,11 +51,48 @@ public class LiveScreenshotColumn extends ListViewColumn {
 	}
 	
     public String getScreenshots(Job job) {
-		String s = "";
 		RunList runs = job.getBuilds();
+		Map<MatrixBuild, String> matrixJobStrings = new HashMap<MatrixBuild, String>();
+		matrixJobStrings.put(null, "");
 		for (Object o : runs) {
 			Run r = (Run)o;
-			s = s + collectScreenshots(r);
+			if (!r.isBuilding())
+				continue;
+			String rs = this.collectScreenshots(r);
+			if (rs.isEmpty())
+				continue;
+			if (r instanceof MatrixBuild) {
+				MatrixBuild mb = (MatrixBuild)r;
+				if (matrixJobStrings.containsKey(mb)) {
+					matrixJobStrings.put(mb, matrixJobStrings.get(mb) + rs);
+				} else {
+					matrixJobStrings.put(mb, rs);
+				}
+			} else {
+				matrixJobStrings.put(null, matrixJobStrings.get(null) + rs);
+			}
+		}
+		
+		String s = matrixJobStrings.get(null);
+		for (Map.Entry<MatrixBuild, String> pair : matrixJobStrings.entrySet()) {
+			MatrixBuild mb = pair.getKey();
+			String rs = pair.getValue();
+			if (mb != null) {
+				if (!s.isEmpty()) {
+					s += "<br/>";
+				}
+				s += "<a href=\"" + mb.getUrl() + "\">" + mb.getDisplayName() + "</a> ";
+				Executor executor = mb.getOneOffExecutor();
+				if (executor != null) {
+					Computer computer = executor.getOwner();
+					if (computer != null) {
+						// find number of oneOffExecutor on that computer. No function for that!
+						int num = computer.getOneOffExecutors().indexOf(executor);
+						s += "<a href=\"" + computer.getUrl() + "oneOffExecutors/" + num + "/stop\">Stop</a> ";
+					}
+				}
+				s += rs;
+			}
 		}
         return s;
     }
