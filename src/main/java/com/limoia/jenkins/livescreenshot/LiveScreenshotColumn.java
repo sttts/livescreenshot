@@ -33,6 +33,7 @@ public class LiveScreenshotColumn extends ListViewColumn {
 	
 	public String collectScreenshots(Run run) {
 		String html = "";
+		
 		// sub-runs of matrix?
 		if (run instanceof MatrixBuild) {
 			MatrixBuild mb = (MatrixBuild)run;
@@ -51,6 +52,7 @@ public class LiveScreenshotColumn extends ListViewColumn {
 	}
 	
     public String getScreenshots(Job job) {
+		// collect builds
 		RunList runs = job.getBuilds();
 		Map<MatrixBuild, String> matrixJobStrings = new HashMap<MatrixBuild, String>();
 		matrixJobStrings.put(null, "");
@@ -73,14 +75,17 @@ public class LiveScreenshotColumn extends ListViewColumn {
 			}
 		}
 		
+		// row for each matrix job
 		String s = matrixJobStrings.get(null);
 		for (Map.Entry<MatrixBuild, String> pair : matrixJobStrings.entrySet()) {
+			// newline?
+			if (!s.isEmpty()) {
+				s += "<br/>";
+			}
+			
+			// add link matrix job and "stop" action 
 			MatrixBuild mb = pair.getKey();
-			String rs = pair.getValue();
 			if (mb != null) {
-				if (!s.isEmpty()) {
-					s += "<br/>";
-				}
 				s += "<a href=\"" + mb.getUrl() + "\">" + mb.getDisplayName() + "</a> ";
 				Executor executor = mb.getOneOffExecutor();
 				if (executor != null) {
@@ -91,9 +96,12 @@ public class LiveScreenshotColumn extends ListViewColumn {
 						s += "<a href=\"" + computer.getUrl() + "oneOffExecutors/" + num + "/stop\">Stop</a> ";
 					}
 				}
-				s += rs;
 			}
+			
+			// append screenshots
+			s += pair.getValue();
 		}
+		
         return s;
     }
     
