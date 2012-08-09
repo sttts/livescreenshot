@@ -11,3 +11,5 @@ of the Jenkins user interface makes sure that you see an up to date screenshot o
 
 By default, the files are called screenshot.png and screenshot-thumb.png. But, this can
 easily changed in the build wrapper configuration of a job.
+
+![Screenshot](https://raw.github.com/sttts/livescreenshot/master/screenshot.png "Screenshot")
