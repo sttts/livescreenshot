@@ -12,6 +12,8 @@ import hudson.model.Computer;
 import hudson.model.Executor;
 import hudson.model.Job;
 import hudson.model.Run;
+import hudson.scm.ChangeLogSet;
+import hudson.scm.ChangeLogSet.Entry;
 import hudson.util.RunList;
 import hudson.views.ListViewColumn;
 import hudson.views.ListViewColumnDescriptor;
@@ -87,6 +89,7 @@ public class LiveScreenshotColumn extends ListViewColumn {
 			MatrixBuild mb = pair.getKey();
 			if (mb != null) {
 				s += "<a href=\"" + mb.getUrl() + "\">" + mb.getDisplayName() + "</a> ";
+				
 				Executor executor = mb.getOneOffExecutor();
 				if (executor != null) {
 					Computer computer = executor.getOwner();
@@ -100,6 +103,19 @@ public class LiveScreenshotColumn extends ListViewColumn {
 			
 			// append screenshots
 			s += pair.getValue();
+
+			// append changelog entries
+			if (mb != null) {
+				ChangeLogSet<? extends Entry> changeLogSet = mb.getChangeSet();
+				if (changeLogSet != null) {
+					for (Object o : changeLogSet.getItems()) {
+						if (o instanceof ChangeLogSet.Entry) {
+							ChangeLogSet.Entry e = (ChangeLogSet.Entry)o;
+							s += "<br/>" + e.getMsgAnnotated();
+						}
+					}
+				}
+			}
 		}
 		
         return s;
