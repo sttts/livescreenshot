@@ -12,6 +12,7 @@
   <artifactId>livescreenshot</artifactId>
   <version>1.4.2-SNAPSHOT</version>
   <packaging>hpi</packaging>
+  <url>http://wiki.jenkins-ci.org/display/JENKINS/LiveScreenshot+Plugin</url>
 
   <developers>
     <developer>
