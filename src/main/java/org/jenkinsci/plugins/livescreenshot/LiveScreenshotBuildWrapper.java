@@ -1,8 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package com.limoia.jenkins.livescreenshot;
+package org.jenkinsci.plugins.livescreenshot;
 
 import hudson.Extension;
 import hudson.Launcher;

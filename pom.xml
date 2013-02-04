@@ -6,7 +6,6 @@
     <version>1.469</version>
   </parent>
 
-  <groupId>com.limoia.jenkins.livescreenshot</groupId>
   <artifactId>livescreenshot</artifactId>
   <version>1.4.3-SNAPSHOT</version>
   <packaging>hpi</packaging>
