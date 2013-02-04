@@ -82,13 +82,16 @@ public class LiveScreenshotColumn extends ListViewColumn {
 		for (Map.Entry<MatrixBuild, String> pair : matrixJobStrings.entrySet()) {
 			// newline?
 			if (!s.isEmpty()) {
-				s += "<br/>";
+				s += "<br/><br/>";
 			}
 			
+			// append screenshots
+			s += pair.getValue();
+
 			// add link matrix job and "stop" action 
 			MatrixBuild mb = pair.getKey();
 			if (mb != null) {
-				s += "<a href=\"" + mb.getUrl() + "\">" + mb.getDisplayName() + "</a> ";
+				s += "<br/><a href=\"" + mb.getUrl() + "\">" + mb.getDisplayName() + "</a> ";
 				
 				Executor executor = mb.getOneOffExecutor();
 				if (executor != null) {
@@ -99,19 +102,14 @@ public class LiveScreenshotColumn extends ListViewColumn {
 						s += "<a href=\"" + computer.getUrl() + "oneOffExecutors/" + num + "/stop\">Stop</a> ";
 					}
 				}
-			}
 			
-			// append screenshots
-			s += pair.getValue();
-
-			// append changelog entries
-			if (mb != null) {
+				// append changelog entries
 				ChangeLogSet<? extends Entry> changeLogSet = mb.getChangeSet();
 				if (changeLogSet != null) {
 					for (Object o : changeLogSet.getItems()) {
 						if (o instanceof ChangeLogSet.Entry) {
 							ChangeLogSet.Entry e = (ChangeLogSet.Entry)o;
-							s += "<br/>" + e.getMsgAnnotated();
+							s += " - " + e.getMsgAnnotated();
 						}
 					}
 				}
