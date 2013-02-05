@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
@@ -9,6 +10,7 @@
   <artifactId>livescreenshot</artifactId>
   <version>1.4.4-SNAPSHOT</version>
   <packaging>hpi</packaging>
+  <name>Live Screenshot</name>
   <url>http://wiki.jenkins-ci.org/display/JENKINS/LiveScreenshot+Plugin</url>
 
   <developers>
@@ -24,7 +26,6 @@
       <url>http://www.gnu.org/licenses/gpl.html</url>
     </license>
   </licenses>
-
 
   <repositories>
     <repository>
