@@ -2,8 +2,8 @@ package org.jenkinsci.plugins.livescreenshot;
 
 import hudson.Extension;
 import hudson.matrix.MatrixBuild;
-import hudson.matrix.MatrixProject;
 import hudson.matrix.MatrixRun;
+import hudson.model.AbstractBuild;
 import hudson.model.Computer;
 import hudson.model.Executor;
 import hudson.model.Job;
@@ -16,7 +16,6 @@ import hudson.views.ListViewColumnDescriptor;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 /**
@@ -50,63 +49,64 @@ public class LiveScreenshotColumn extends ListViewColumn {
 	}
 	
     public String getScreenshots(Job job) {
-		// collect builds
+		// collect screenshot link strings for all active builds
 		RunList runs = job.getBuilds();
-		Map<MatrixBuild, String> matrixJobStrings = new HashMap<MatrixBuild, String>();
-		matrixJobStrings.put(null, "");
+		HashMap<AbstractBuild, String> runScreenshotStrings = new HashMap<AbstractBuild, String>();
 		for (Object o : runs) {
-			Run r = (Run)o;
-			if (!r.isBuilding())
+			AbstractBuild b = (AbstractBuild)o;
+			if (!b.isBuilding())
 				continue;
-			String rs = this.collectScreenshots(r);
+			String rs = this.collectScreenshots(b);
 			if (rs.isEmpty())
 				continue;
-			if (r instanceof MatrixBuild) {
-				MatrixBuild mb = (MatrixBuild)r;
-				if (matrixJobStrings.containsKey(mb)) {
-					matrixJobStrings.put(mb, matrixJobStrings.get(mb) + rs);
-				} else {
-					matrixJobStrings.put(mb, rs);
-				}
+			if (runScreenshotStrings.containsKey(b)) {
+					runScreenshotStrings.put(b, runScreenshotStrings.get(b) + rs);
 			} else {
-				matrixJobStrings.put(null, matrixJobStrings.get(null) + rs);
+				runScreenshotStrings.put(b, rs);
 			}
 		}
 		
-		// row for each matrix job
-		String s = matrixJobStrings.get(null);
-		for (Map.Entry<MatrixBuild, String> pair : matrixJobStrings.entrySet()) {
+		// one row for each job
+		String s = "";
+		for (Map.Entry<AbstractBuild, String> pair : runScreenshotStrings.entrySet()) {
 			// newline?
 			if (!s.isEmpty()) {
 				s += "<br/><br/>";
 			}
 			
-			// append screenshots
+			// first the screenshots
 			s += pair.getValue();
 
-			// add link matrix job and "stop" action 
-			MatrixBuild mb = pair.getKey();
-			if (mb != null) {
-				s += "<br/><a href=\"" + mb.getUrl() + "\">" + mb.getDisplayName() + "</a> ";
-				
-				Executor executor = mb.getOneOffExecutor();
-				if (executor != null) {
-					Computer computer = executor.getOwner();
-					if (computer != null) {
-						// find number of oneOffExecutor on that computer. No function for that!
-						int num = computer.getOneOffExecutors().indexOf(executor);
-						s += "<a href=\"" + computer.getUrl() + "oneOffExecutors/" + num + "/stop\">Stop</a> ";
-					}
+			// then the line with the "stop" link and the changelog
+			AbstractBuild r = pair.getKey();
+			s += "<br/><a href=\"" + r.getUrl() + "\">" + r.getDisplayName() + "</a> ";
+
+			// create link to executor stop action, or the oneOffExecutor for MatrixBuilds
+			Executor executor = null;
+			boolean isOneOffExecutor = r.getOneOffExecutor() != null;
+			if (isOneOffExecutor) {
+				executor = r.getOneOffExecutor();
+			} else {
+				executor = r.getExecutor();
+			}
+			if (executor != null) {
+				Computer computer = executor.getOwner();
+				if (computer != null) {
+					s += "<a href=\"" + computer.getUrl() + 
+							(isOneOffExecutor ? "oneOffExecutors" : "executors") +
+							"/" + 
+							(isOneOffExecutor ? computer.getOneOffExecutors().indexOf(executor) : executor.getNumber()) +
+							"/stop\">Stop</a> ";
 				}
+			}
 			
-				// append changelog entries
-				ChangeLogSet<? extends Entry> changeLogSet = mb.getChangeSet();
-				if (changeLogSet != null) {
-					for (Object o : changeLogSet.getItems()) {
-						if (o instanceof ChangeLogSet.Entry) {
-							ChangeLogSet.Entry e = (ChangeLogSet.Entry)o;
-							s += " - " + e.getMsgAnnotated();
-						}
+			// append changelog entries
+			ChangeLogSet<? extends Entry> changeLogSet = r.getChangeSet();
+			if (changeLogSet != null) {
+				for (Object o : changeLogSet.getItems()) {
+					if (o instanceof ChangeLogSet.Entry) {
+						ChangeLogSet.Entry e = (ChangeLogSet.Entry)o;
+						s += " - " + e.getMsgAnnotated();
 					}
 				}
 			}
